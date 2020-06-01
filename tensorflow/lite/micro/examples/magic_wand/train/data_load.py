@@ -84,18 +84,18 @@ class DataLoader(object):
   def format_support_func(self, padded_num, length, data, label):
     """Support function for format.(Helps format train, valid and test.)"""
     # Add 2 padding, initialize data and label
-    # length *= padded_num
-    # features = np.zeros((length, self.seq_length, self.dim))
-    # labels = np.zeros(length)
+    length *= padded_num
+    features = np.zeros((length, self.seq_length, self.dim))
+    labels = np.zeros(length)
     # Get padding for train, valid and test
-    # for idx, (data, label) in enumerate(zip(data, label)):
-    #   padded_data = self.pad(data, self.seq_length, self.dim)
-    #   # for num in range(padded_num):
-    #   features[idx] = padded_data[num]
-    #   labels[idx] = self.label2id[label]
+    for idx, (data, label) in enumerate(zip(data, label)):
+      # padded_data = self.pad(data, self.seq_length, self.dim)
+      for num in range(len(data)):
+        features[idx] = data[num]
+        labels[idx] = self.label2id[label]
     # Turn into tf.data.Dataset
     dataset = tf.data.Dataset.from_tensor_slices(
-        (data, np.array(label).astype("int32")))
+        (features, labels.astype("int32")))
     return length, dataset
 
   def format(self):

@@ -55,7 +55,7 @@ def build_cnn(seq_length):
           8, (4, 3),
           padding="same",
           activation="relu",
-          input_shape=(seq_length, 3, 1)),  # output_shape=(batch, 128, 3, 8)
+          input_shape=(seq_length, 3, 1)),  # output_shape=(batch, 300, 3, 8)
       tf.keras.layers.MaxPool2D((3, 3)),  # (batch, 42, 1, 8)
       tf.keras.layers.Dropout(0.1),  # (batch, 42, 1, 8)
       tf.keras.layers.Conv2D(16, (4, 1), padding="same",
@@ -69,9 +69,9 @@ def build_cnn(seq_length):
   ])
   model_path = os.path.join("./netmodels", "CNN")
   print("Built CNN.")
-  if not os.path.exists(model_path):
-    os.makedirs(model_path)
-  model.load_weights("./netmodels/CNN/weights.h5")
+  # if not os.path.exists(model_path):
+  #   os.makedirs(model_path)
+  # model.load_weights("./netmodels/CNN/weights.h5")
   return model, model_path
 
 
@@ -100,6 +100,7 @@ def load_data(train_data_path, valid_data_path, test_data_path, seq_length):
 
 def build_net(args, seq_length):
   if args.model == "CNN":
+    print(seq_length)
     model, model_path = build_cnn(seq_length)
   elif args.model == "LSTM":
     model, model_path = build_lstm(seq_length)
