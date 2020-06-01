@@ -36,16 +36,16 @@ import random
 
 LABEL_NAME = "gesture"
 DATA_NAME = "accel_ms2_xyz"
-folders = ["wing", "ring", "slope"]
+folders = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+          "apostrophe","backspace","comma","done","exclamation_point", "period","question_mark","quotes","slash","space"]
 names = [
-    "hyw", "shiyun", "tangsy", "dengyl", "zhangxy", "pengxl", "liucx",
-    "jiangyh", "xunkai"
+    "lauren","katherine","annie"
 ]
 
 
 def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=redefined-outer-name
   """Read collected data from files."""
-  if folder != "negative":
+  if folder != "negative": 
     with open(file_to_read, "r") as f:
       lines = csv.reader(f)
       data_new = {}
