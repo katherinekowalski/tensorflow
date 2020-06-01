@@ -86,6 +86,7 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
 def generate_negative_data(data):  # pylint: disable=redefined-outer-name
   """Generate negative data labeled as 'negative6~8'."""
   # Big movement -> around straight line
+  samp = 300
   for i in range(100):
     if i > 80:
       dic = {DATA_NAME: [], LABEL_NAME: "negative", "name": "negative8"}
@@ -99,7 +100,7 @@ def generate_negative_data(data):  # pylint: disable=redefined-outer-name
     x_increase = (random.random() - 0.5) * 10
     y_increase = (random.random() - 0.5) * 10
     z_increase = (random.random() - 0.5) * 10
-    for j in range(128):
+    for j in range(samp):
       dic[DATA_NAME].append([
           start_x + j * x_increase + (random.random() - 0.5) * 6,
           start_y + j * y_increase + (random.random() - 0.5) * 6,
@@ -114,7 +115,7 @@ def generate_negative_data(data):  # pylint: disable=redefined-outer-name
       dic = {DATA_NAME: [], LABEL_NAME: "negative", "name": "negative7"}
     else:
       dic = {DATA_NAME: [], LABEL_NAME: "negative", "name": "negative6"}
-    for j in range(128):
+    for j in range(samp):
       dic[DATA_NAME].append([(random.random() - 0.5) * 1000,
                              (random.random() - 0.5) * 1000,
                              (random.random() - 0.5) * 1000])
@@ -130,7 +131,7 @@ def generate_negative_data(data):  # pylint: disable=redefined-outer-name
     start_x = (random.random() - 0.5) * 2000
     start_y = (random.random() - 0.5) * 2000
     start_z = (random.random() - 0.5) * 2000
-    for j in range(128):
+    for j in range(samp):
       dic[DATA_NAME].append([
           start_x + (random.random() - 0.5) * 40,
           start_y + (random.random() - 0.5) * 40,
@@ -153,7 +154,7 @@ if __name__ == "__main__":
   for idx1, folder in enumerate(folders):
     for idx2, name in enumerate(names):
       prepare_original_data(folder, name, data,
-                            "./%s/output_%s_%s.txt" % (folder, folder, name))
+                            r"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train/DATA/%s/output_%s_%s.txt" % (folder, folder, name))
   for idx in range(5):
     prepare_original_data("negative", "negative%d" % (idx + 1), data,
                           "./negative/output_negative_%d.txt" % (idx + 1))

@@ -47,3 +47,5 @@ gradleBuild
 Podfile.lock
 Pods
 xcuserdata
+*.txt
+tensorflow/lite/micro/examples/magic_wand/train/DATA.zip
