@@ -154,7 +154,7 @@ if __name__ == "__main__":
   for idx1, folder in enumerate(folders):
     for idx2, name in enumerate(names):
       prepare_original_data(folder, name, data,
-                            r"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train/DATA/%s/output_%s_%s.txt" % (folder, folder, name))
+                            "./DATA/%s/output_%s_%s.txt" % (folder, folder, name))
   for idx in range(5):
     prepare_original_data("negative", "negative%d" % (idx + 1), data,
                           "./negative/output_negative_%d.txt" % (idx + 1))
