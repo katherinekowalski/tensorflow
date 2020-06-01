@@ -59,7 +59,7 @@ def person_split(whole_data, train_names, valid_names, test_names):  # pylint: d
 
 
 if __name__ == "__main__":
-  data = read_data("./DATA")
+  data = read_data("C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train/data/complete_data")
   train_names = [
       "lauren", "negative3",
       "negative4", "negative5", "negative6"

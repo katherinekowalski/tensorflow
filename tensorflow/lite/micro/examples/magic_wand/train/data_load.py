@@ -39,10 +39,10 @@ class DataLoader(object):
                seq_length):
     self.dim = 3
     self.seq_length = seq_length
-    self.label2id = {["A":0,"B":1,"C":2,"D":3,"E":4,"F":5,"G":6,"H":7,"I":8,"J":9,"K":10,"L":11,"M":12,"N":13,"O":14,
+    self.label2id = {"A":0,"B":1,"C":2,"D":3,"E":4,"F":5,"G":6,"H":7,"I":8,"J":9,"K":10,"L":11,"M":12,"N":13,"O":14,
         "P":15,"Q":16,"R":17,"S":18,"T":19,"U":20,"V":21,"W":22,"X":23,"Y":24,"Z":25,
         "apostrophe":26,"backspace":27,"comma":28,"done":29,"exclamation_point":30, "period":31,
-        "question_mark":32,"quotes":33,"slash":34,"space":35]}
+        "question_mark":32,"quotes":33,"slash":34,"space":35, "negative":36}
     self.train_data, self.train_label, self.train_len = self.get_data_file(
         train_data_path, "train")
     self.valid_data, self.valid_label, self.valid_len = self.get_data_file(
@@ -84,23 +84,23 @@ class DataLoader(object):
   def format_support_func(self, padded_num, length, data, label):
     """Support function for format.(Helps format train, valid and test.)"""
     # Add 2 padding, initialize data and label
-    length *= padded_num
-    features = np.zeros((length, self.seq_length, self.dim))
-    labels = np.zeros(length)
+    # length *= padded_num
+    # features = np.zeros((length, self.seq_length, self.dim))
+    # labels = np.zeros(length)
     # Get padding for train, valid and test
-    for idx, (data, label) in enumerate(zip(data, label)):
-      padded_data = self.pad(data, self.seq_length, self.dim)
-      for num in range(padded_num):
-        features[padded_num * idx + num] = padded_data[num]
-        labels[padded_num * idx + num] = self.label2id[label]
+    # for idx, (data, label) in enumerate(zip(data, label)):
+    #   padded_data = self.pad(data, self.seq_length, self.dim)
+    #   # for num in range(padded_num):
+    #   features[idx] = padded_data[num]
+    #   labels[idx] = self.label2id[label]
     # Turn into tf.data.Dataset
     dataset = tf.data.Dataset.from_tensor_slices(
-        (features, labels.astype("int32")))
+        (data, np.array(label).astype("int32")))
     return length, dataset
 
   def format(self):
     """Format data(including padding, etc.) and get the dataset for the model."""
-    padded_num = 2
+    padded_num = 1
     self.train_len, self.train_data = self.format_support_func(
         padded_num, self.train_len, self.train_data, self.train_label)
     self.valid_len, self.valid_data = self.format_support_func(
