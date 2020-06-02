@@ -39,7 +39,7 @@ DATA_NAME = "accel_ms2_xyz"
 folders = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
           "apostrophe","backspace","comma","done","exclamation_point", "period","question_mark","quotes","slash","space"]
 names = [
-    "lauren","katherine","annie"
+    "lauren","katherine","annie", "chris"
 ]
 
 
