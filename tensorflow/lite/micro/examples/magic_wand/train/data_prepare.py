@@ -153,18 +153,13 @@ if __name__ == "__main__":
   data = []  # pylint: disable=redefined-outer-name
   for idx1, folder in enumerate(folders):
     for idx2, name in enumerate(names):
-      # path = os.path.join("C:",os.sep,"Users", "kathe","Documents", "Github", "tensorflow","tensorflow","lite","micro","examples","magic_wand","train","data", folder, "ouput_" + folder+"_"+ name + ".txt")    #"C:\Users\kathe\Documents\GitHub\tensorflow\tensorflow\lite\micro\examples\magic_wand\train\data\" + folder +  "\output_" + folder +"_"+ name + ".txt"
       path = "./data/"+folder+"/ouput_"+folder+"_"+ name + ".txt"
       print(path)
       prepare_original_data(folder, name, data, path)
 
-      #"C:\Users\kathe\Documents\GitHub\tensorflow\tensorflow\lite\micro\examples\magic_wand\train\data\%s\output_%s_%s.txt" % (folder, folder, name)
-      #C:\Users\kathe\Documents\GitHub\tensorflow\tensorflow\lite\micro\examples\magic_wand\train
-      #C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train/data/%s/output_%s_%s.txt
-      #"C:\Users\kathe\Documents\GitHub\tensorflow\tensorflow\lite\micro\examples\magic_wand\train\data\A\ouput_A_lauren.txt"
-  for idx in range(1):
+  for idx in range(3): ##############THIS IS HOW MANY NEG FILES WE HAVE##############################
     prepare_original_data("negative", "negative%d" % (idx + 1), data,
-                          "./data/negative/ouput_negative_annie.txt" ) #% (idx + 1) #"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train
+                          "./data/negative/ouput_negative_"%d".txt" % (idx + 1)) #% (idx + 1) #"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train
   # generate_negative_data(data)
   print("data_length: " + str(len(data)))
   if not os.path.exists("./data"):
