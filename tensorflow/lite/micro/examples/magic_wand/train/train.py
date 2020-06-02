@@ -30,8 +30,8 @@ from data_load import DataLoader
 import numpy as np
 import tensorflow as tf
 
-# logdir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-# tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
+logdir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
 
 def reshape_function(data, label):
@@ -144,8 +144,8 @@ def train_net(
       epochs=epochs,
       validation_data=valid_data,
       steps_per_epoch=1000,
-      validation_steps=int((valid_len - 1) / batch_size + 1))#,
-      # callbacks=[tensorboard_callback])
+      validation_steps=int((valid_len - 1) / batch_size + 1),
+      callbacks=[tensorboard_callback])
   loss, acc = model.evaluate(test_data)
   pred = np.argmax(model.predict(test_data), axis=1)
   confusion = tf.math.confusion_matrix(
