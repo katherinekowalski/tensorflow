@@ -72,7 +72,7 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
       data_new["name"] = name
       for idx, line in enumerate(lines):
         if len(line) == 3 and line[2] != "-":
-          if len(data_new[DATA_NAME]) == 120:
+          if len(data_new[DATA_NAME]) == 300:
             data.append(data_new)
             data_new = {}
             data_new[LABEL_NAME] = folder
