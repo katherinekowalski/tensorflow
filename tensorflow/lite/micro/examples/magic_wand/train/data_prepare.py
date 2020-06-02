@@ -36,6 +36,7 @@ import random
 
 LABEL_NAME = "gesture"
 DATA_NAME = "accel_ms2_xyz"
+
 folders = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
           "apostrophe","backspace","comma","done","exclamation_point", "period","question_mark","quotes","slash","space"]
 names = [
@@ -54,11 +55,12 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
       data_new["name"] = name
       for idx, line in enumerate(lines):  # pylint: disable=unused-variable,redefined-outer-name
         if len(line) == 3:
-          if line[2] == "-" and data_new[DATA_NAME]:
+          # if line[2] == "-" and data_new[DATA_NAME]:
+          if line[2] == "-": 
             data.append(data_new)
             data_new = {}
-            data_new[LABEL_NAME] = folder
-            data_new[DATA_NAME] = []
+            data_new[LABEL_NAME] = folder 
+            data_new[DATA_NAME] = [] # this should store (300,3) data recording
             data_new["name"] = name
           elif line[2] != "-":
             data_new[DATA_NAME].append([float(i) for i in line[0:3]])
@@ -72,7 +74,7 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
       data_new["name"] = name
       for idx, line in enumerate(lines):
         if len(line) == 3 and line[2] != "-":
-          if len(data_new[DATA_NAME]) == 120:
+          if len(data_new[DATA_NAME]) == 300:
             data.append(data_new)
             data_new = {}
             data_new[LABEL_NAME] = folder
@@ -154,7 +156,7 @@ if __name__ == "__main__":
   for idx1, folder in enumerate(folders):
     for idx2, name in enumerate(names):
       # path = os.path.join("C:",os.sep,"Users", "kathe","Documents", "Github", "tensorflow","tensorflow","lite","micro","examples","magic_wand","train","data", folder, "ouput_" + folder+"_"+ name + ".txt")    #"C:\Users\kathe\Documents\GitHub\tensorflow\tensorflow\lite\micro\examples\magic_wand\train\data\" + folder +  "\output_" + folder +"_"+ name + ".txt"
-      path = "./data/"+folder+"/ouput_"+folder+"_"+ name + ".txt"
+      path = "./data/"+folder+"/ouput_"+folder+"_"+ name + ".txt" 
       print(path)
       prepare_original_data(folder, name, data, path)
 
