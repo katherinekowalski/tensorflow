@@ -30,8 +30,8 @@ from data_load import DataLoader
 import numpy as np
 import tensorflow as tf
 
-logdir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
+# logdir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+# tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
 
 def reshape_function(data, label):
@@ -65,7 +65,7 @@ def build_cnn(seq_length):
       tf.keras.layers.Flatten(),  # (batch, 224)
       tf.keras.layers.Dense(16, activation="relu"),  # (batch, 16)
       tf.keras.layers.Dropout(0.1),  # (batch, 16)
-      tf.keras.layers.Dense(4, activation="softmax")  # (batch, 4)
+      tf.keras.layers.Dense(37, activation="softmax")  # (batch, 4)
   ])
   model_path = os.path.join("./netmodels", "CNN")
   print("Built CNN.")
@@ -81,7 +81,7 @@ def build_lstm(seq_length):
       tf.keras.layers.Bidirectional(
           tf.keras.layers.LSTM(22),
           input_shape=(seq_length, 3)),  # output_shape=(batch, 44)
-      tf.keras.layers.Dense(4, activation="sigmoid")  # (batch, 4)
+      tf.keras.layers.Dense(36, activation="sigmoid")  # (batch, 4)
   ])
   model_path = os.path.join("./netmodels", "LSTM")
   print("Built LSTM.")
@@ -144,8 +144,8 @@ def train_net(
       epochs=epochs,
       validation_data=valid_data,
       steps_per_epoch=1000,
-      validation_steps=int((valid_len - 1) / batch_size + 1),
-      callbacks=[tensorboard_callback])
+      validation_steps=int((valid_len - 1) / batch_size + 1))#,
+      # callbacks=[tensorboard_callback])
   loss, acc = model.evaluate(test_data)
   pred = np.argmax(model.predict(test_data), axis=1)
   confusion = tf.math.confusion_matrix(
