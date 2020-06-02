@@ -160,7 +160,7 @@ if __name__ == "__main__":
       prepare_original_data(folder, name, data, path)
 
   for idx in range(3): ##############THIS IS HOW MANY NEG FILES WE HAVE##############################
-    prepare_original_data("negative", "negative"+name , data, #% (idx + 1)
+    prepare_original_data("negative", "negative_"+name , data, #% (idx + 1)
                           "./data/negative/output_negative_"+name+".txt")# % (idx + 1)) #% (idx + 1) #"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train
   # generate_negative_data(data)
   print("data_length: " + str(len(data)))
