@@ -165,7 +165,7 @@ if __name__ == "__main__":
   for idx in range(1):
     prepare_original_data("negative", "negative%d" % (idx + 1), data,
                           "./data/negative/ouput_negative_annie.txt" ) #% (idx + 1) #"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train
-  generate_negative_data(data)
+  # generate_negative_data(data)
   print("data_length: " + str(len(data)))
   if not os.path.exists("./data"):
     os.makedirs("./data")
