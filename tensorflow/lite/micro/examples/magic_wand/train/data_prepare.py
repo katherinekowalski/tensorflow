@@ -37,8 +37,9 @@ import random
 LABEL_NAME = "gesture"
 DATA_NAME = "accel_ms2_xyz"
 
-folders = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-          "apostrophe","backspace","comma","done","exclamation_point", "period","question_mark","quotes","slash","space"]
+folders = ["A","B","N","O","backspace","space","done"]
+# folders = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+#           "apostrophe","backspace","comma","done","exclamation_point", "period","question_mark","quotes","slash","space"]
 names = [
     "lauren","katherine","annie", "chris"
 ]
@@ -55,7 +56,6 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
       data_new["name"] = name
       for idx, line in enumerate(lines):  # pylint: disable=unused-variable,redefined-outer-name
         if len(line) == 3:
-          # if line[2] == "-" and data_new[DATA_NAME]:
           if line[2] == "-": 
             data.append(data_new)
             data_new = {}
@@ -63,7 +63,8 @@ def prepare_original_data(folder, name, data, file_to_read):  # pylint: disable=
             data_new[DATA_NAME] = [] # this should store (300,3) data recording
             data_new["name"] = name
           elif line[2] != "-":
-            data_new[DATA_NAME].append([float(i) for i in line[0:3]])
+            data_new[DATA_NAME].append([float(line[i]) if i < 2 else (float(line[i]) -.98) for i in range(3)])
+            # data_new[DATA_NAME].append([float(i) for i in line[0:3]])
       data.append(data_new)
   else:
     with open(file_to_read, "r") as f:
@@ -159,10 +160,10 @@ if __name__ == "__main__":
       print(path)
       prepare_original_data(folder, name, data, path)
 
-  for idx in range(3): ##############THIS IS HOW MANY NEG FILES WE HAVE##############################
-    prepare_original_data("negative", "negative_"+name , data, #% (idx + 1)
-                          "./data/negative/output_negative_"+name+".txt")# % (idx + 1)) #% (idx + 1) #"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train
-  # generate_negative_data(data)
+  # for idx in range(3): ##############THIS IS HOW MANY NEG FILES WE HAVE##############################
+  #   prepare_original_data("negative", "negative_"+name , data, #% (idx + 1)
+  #                         "./data/negative/output_negative_"+name+".txt")# % (idx + 1)) #% (idx + 1) #"C:/Users/kathe/Documents/GitHub/tensorflow/tensorflow/lite/micro/examples/magic_wand/train
+  # # generate_negative_data(data)
   print("data_length: " + str(len(data)))
   if not os.path.exists("./data"):
     os.makedirs("./data")

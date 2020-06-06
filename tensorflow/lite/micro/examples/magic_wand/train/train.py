@@ -32,7 +32,7 @@ import tensorflow as tf
 
 logdir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
-
+NUM_GESTURES = 7
 
 def reshape_function(data, label):
   reshaped_data = tf.reshape(data, [-1, 3, 1])
@@ -51,22 +51,38 @@ def calculate_model_size(model):
 def build_cnn(seq_length):
   """Builds a convolutional neural network in Keras."""
   model = tf.keras.Sequential([
-      tf.keras.layers.Conv2D(
-          8, (4, 3),
+      tf.keras.layers.Conv2D( # TODO: try changing this (4,3) to (300,3) to make input size
+          16, (1, 3),
           padding="same",
           activation="relu",
-          input_shape=(seq_length, 3, 1)),  # output_shape=(batch, 300, 3, 8)
-      tf.keras.layers.MaxPool2D((3, 3)),  # (batch, 42, 1, 8)
-      tf.keras.layers.Dropout(0.1),  # (batch, 42, 1, 8)
-      tf.keras.layers.Conv2D(16, (4, 1), padding="same",
-                             activation="relu"),  # (batch, 42, 1, 16)
-      tf.keras.layers.MaxPool2D((3, 1), padding="same"),  # (batch, 14, 1, 16)
-      tf.keras.layers.Dropout(0.1),  # (batch, 14, 1, 16)
+          input_shape=(seq_length, 3, 1),kernel_initializer='glorot_uniform',kernel_regularizer=tf.keras.regularizers.l2(1e-3)),  # output_shape=(batch, 300, 3, 8)
+      tf.keras.layers.AveragePooling2D((3, 1)),  # (batch, 42, 1, 8)
+      tf.keras.layers.Dropout(0.25),  # (batch, 42, 1, 8) 
       tf.keras.layers.Flatten(),  # (batch, 224)
-      tf.keras.layers.Dense(16, activation="relu"),  # (batch, 16)
-      tf.keras.layers.Dropout(0.1),  # (batch, 16)
-      tf.keras.layers.Dense(37, activation="softmax")  # (batch, 4)
+      tf.keras.layers.Dense(100, activation="relu"),  # (batch, 16)
+      tf.keras.layers.Dropout(0.2),
+      tf.keras.layers.Dense(50, activation="relu"),  # (batch, 16)
+      tf.keras.layers.Dropout(0.1),
+      tf.keras.layers.Dense(NUM_GESTURES, activation="softmax")  # (batch, NUM_GESTURES)
   ])
+  ######## COPY OF ORIGINAL MODEL BELOW #######
+  # model = tf.keras.Sequential([
+  #     tf.keras.layers.Conv2D( # TODO: try changing this (4,3) to (300,3) to make input size
+  #         8, (4, 3),
+  #         padding="same",
+  #         activation="relu",
+  #         input_shape=(seq_length, 3, 1)),  # output_shape=(batch, 300, 3, 8)
+  #     tf.keras.layers.MaxPool2D((3, 3)),  # (batch, 42, 1, 8)
+  #     tf.keras.layers.Dropout(0.1),  # (batch, 42, 1, 8)
+  #     tf.keras.layers.Conv2D(16, (4, 1), padding="same",
+  #                            activation="relu"),  # (batch, 42, 1, 16)
+  #     tf.keras.layers.MaxPool2D((3, 1), padding="same"),  # (batch, 14, 1, 16)
+  #     tf.keras.layers.Dropout(0.1),  # (batch, 14, 1, 16)
+  #     tf.keras.layers.Flatten(),  # (batch, 224)
+  #     tf.keras.layers.Dense(16, activation="relu"),  # (batch, 16)
+  #     tf.keras.layers.Dropout(0.1),  # (batch, 16)
+  #     tf.keras.layers.Dense(37, activation="softmax")  # (batch, 4)
+  # ])
   model_path = os.path.join("./netmodels", "CNN")
   print("Built CNN.")
   # if not os.path.exists(model_path):
@@ -81,7 +97,7 @@ def build_lstm(seq_length):
       tf.keras.layers.Bidirectional(
           tf.keras.layers.LSTM(22),
           input_shape=(seq_length, 3)),  # output_shape=(batch, 44)
-      tf.keras.layers.Dense(36, activation="sigmoid")  # (batch, 4)
+      tf.keras.layers.Dense(NUM_GESTURES, activation="sigmoid")  # (batch, 4)
   ])
   model_path = os.path.join("./netmodels", "LSTM")
   print("Built LSTM.")
@@ -121,8 +137,8 @@ def train_net(
     kind):
   """Trains the model."""
   calculate_model_size(model)
-  epochs = 50
-  batch_size = 64
+  epochs = 5
+  batch_size = 256
   model.compile(
       optimizer="adam",
       loss="sparse_categorical_crossentropy",
@@ -139,19 +155,25 @@ def train_net(
   train_data = train_data.batch(batch_size).repeat()
   valid_data = valid_data.batch(batch_size)
   test_data = test_data.batch(batch_size)
+  def scheduler(epoch):
+    if epoch < 10:
+      return 0.001
+    else:
+      return 0.001 * tf.math.exp(0.1 * (10 - epoch))
+  lr_sched_callback = tf.keras.callbacks.LearningRateScheduler(scheduler)
   model.fit(
       train_data,
       epochs=epochs,
       validation_data=valid_data,
       steps_per_epoch=1000,
       validation_steps=int((valid_len - 1) / batch_size + 1),
-      callbacks=[tensorboard_callback])
+      callbacks=[tensorboard_callback,lr_sched_callback])
   loss, acc = model.evaluate(test_data)
   pred = np.argmax(model.predict(test_data), axis=1)
   confusion = tf.math.confusion_matrix(
       labels=tf.constant(test_labels),
       predictions=tf.constant(pred),
-      num_classes=37)
+      num_classes=NUM_GESTURES)
   # tf.io.write_file(
   #   'confusion_matrix.txt', confusion, name=None)
   print(confusion)

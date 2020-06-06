@@ -53,7 +53,7 @@ def split_data(data, train_ratio, valid_ratio):  # pylint: disable=redefined-out
   train_data = []  # pylint: disable=redefined-outer-name
   valid_data = []  # pylint: disable=redefined-outer-name
   test_data = []  # pylint: disable=redefined-outer-name
-  num_dic = {"wing": 0, "ring": 0, "slope": 0, "negative": 0}
+  num_dic = {"A":0, "B":1, "N":2, "O":3, "backspace":4, "space":5,"done":6}
   for idx, item in enumerate(data):  # pylint: disable=unused-variable
     for i in num_dic:
       if item["gesture"] == i:
@@ -85,6 +85,6 @@ def split_data(data, train_ratio, valid_ratio):  # pylint: disable=redefined-out
 if __name__ == "__main__":
   data = read_data("./data/complete_data")
   train_data, valid_data, test_data = split_data(data, 0.6, 0.2)
-  write_data(train_data, "./data/train")
-  write_data(valid_data, "./data/valid")
-  write_data(test_data, "./data/test")
+  write_data(train_data, "./person_split/train")
+  write_data(valid_data, "./person_split/valid")
+  write_data(test_data, "./person_split/test")
