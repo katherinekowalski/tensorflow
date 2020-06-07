@@ -41,7 +41,7 @@ folders = ["A","B","N","O","backspace","space","done"]
 # folders = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
 #           "apostrophe","backspace","comma","done","exclamation_point", "period","question_mark","quotes","slash","space"]
 names = [
-    "lauren","katherine","annie", "chris"
+    "lauren","katherine","annie", "chris","hallie"
 ]
 
 
