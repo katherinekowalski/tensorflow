@@ -208,7 +208,7 @@ if __name__ == "__main__":
   parser.add_argument("--person", "-p")
   args = parser.parse_args()
 
-  seq_length = 300
+  seq_length = 400
 
   print("Start to load data...")
   if args.person == "true":
