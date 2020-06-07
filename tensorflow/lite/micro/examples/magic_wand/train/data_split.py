@@ -85,6 +85,6 @@ def split_data(data, train_ratio, valid_ratio):  # pylint: disable=redefined-out
 if __name__ == "__main__":
   data = read_data("./data/complete_data")
   train_data, valid_data, test_data = split_data(data, 0.6, 0.2)
-  write_data(train_data, "./person_split/train")
-  write_data(valid_data, "./person_split/valid")
-  write_data(test_data, "./person_split/test")
+  write_data(train_data, "./data/train")
+  write_data(valid_data, "./data/valid")
+  write_data(test_data, "./data/test")
