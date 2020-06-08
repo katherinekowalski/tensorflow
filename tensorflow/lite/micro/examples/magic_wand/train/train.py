@@ -142,7 +142,7 @@ def train_net(
   model.compile(
       optimizer="adam",
       loss="sparse_categorical_crossentropy",
-      metrics=["accuracy"])
+      metrics=["accuracy", tf.keras.metrics.SparseTopKCategoricalAccuracy(k=2)])
   if kind == "CNN":
     train_data = train_data.map(reshape_function)
     test_data = test_data.map(reshape_function)
@@ -168,7 +168,7 @@ def train_net(
       steps_per_epoch=1000,
       validation_steps=int((valid_len - 1) / batch_size + 1),
       callbacks=[tensorboard_callback,lr_sched_callback])
-  loss, acc = model.evaluate(test_data)
+  loss, acc, topkacc = model.evaluate(test_data)
   pred = np.argmax(model.predict(test_data), axis=1)
   confusion = tf.math.confusion_matrix(
       labels=tf.constant(test_labels),
@@ -178,7 +178,7 @@ def train_net(
   #   'confusion_matrix.txt', confusion, name=None)
   print(confusion)
 
-  print("Loss {}, Accuracy {}".format(loss, acc))
+  print("Loss {}, Accuracy {}, Top {} Accuracy {}".format(loss, acc, 2, topkacc))
   # Convert the model to the TensorFlow Lite format without quantization
   converter = tf.lite.TFLiteConverter.from_keras_model(model)
   tflite_model = converter.convert()
